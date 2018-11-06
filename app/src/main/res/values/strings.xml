@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Movie library</string>
+
+    <string name="drawer_popular">Home</string>
+    <string name="drawer_upcoming">Upcoming</string>
+    <string name="drawer_top_rated">Top rated</string>
+    <string name="drawer_favorites">Favorites</string>
+
+</resources>
