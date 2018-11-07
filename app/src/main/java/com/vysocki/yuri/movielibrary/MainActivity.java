@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private int fragmentContainerId;
     private ArrayList<Integer> menuStack;
+    private final String MENU_STACK_TAG = "MENU_STACK_TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +31,40 @@ public class MainActivity extends AppCompatActivity
         fragmentContainerId = R.id.fragment_container;
         menuStack = new ArrayList<>();
 
+        if (savedInstanceState != null) {
+            menuStack = savedInstanceState.getIntegerArrayList(MENU_STACK_TAG);
+        }
+
         navigationView.setNavigationItemSelectedListener(drawerClickListener);
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            replaceFragment(MovieListFragment.newInstance(R.id.nav_popular), true, R.id.nav_popular);
+            //activity created for the first time
+            replaceFragment(MovieListFragment.newInstance(R.id.nav_popular), R.id.nav_popular);
             navigationView.setCheckedItem(R.id.nav_popular);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntegerArrayList(MENU_STACK_TAG, menuStack);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
+            finish();
+        } else {
+            super.onBackPressed();
+            menuStack.remove(menuStack.size()-1);
+            navigationView.setCheckedItem(menuStack.get(menuStack.size()-1));
+        }
+    }
+
+    public void onMovieSelected(Integer movieId) {
+        MovieDetailsFragment detailsFragment =
+                MovieDetailsFragment.newInstance(movieId);
+        replaceFragment(detailsFragment, null);
     }
 
     private NavigationView.OnNavigationItemSelectedListener drawerClickListener =
@@ -51,7 +80,7 @@ public class MainActivity extends AppCompatActivity
                         drawerLayout.closeDrawers();
 
                         Fragment selectedFragment = defineSelectedMenuItem(menuItem.getItemId());
-                        replaceFragment(selectedFragment, true, menuItem.getItemId());
+                        replaceFragment(selectedFragment, menuItem.getItemId());
 
                         return true;
                     }
@@ -59,11 +88,6 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-    public void onMovieSelected(Integer movieId) {
-        MovieDetailsFragment detailsFragment =
-                MovieDetailsFragment.newInstance(movieId);
-        replaceFragment(detailsFragment, true, null);
-    }
 
     private Fragment defineSelectedMenuItem(int menuItemId) {
         Fragment selectedFragment = null;
@@ -84,10 +108,9 @@ public class MainActivity extends AppCompatActivity
         return selectedFragment;
     }
 
-    private void replaceFragment(Fragment fragment, boolean toBackStack, @Nullable Integer menuItemId) {
+    private void replaceFragment(Fragment fragment, @Nullable Integer menuItemId) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(fragmentContainerId, fragment, fragment.getClass().toString());
-        if (toBackStack) {
             fragmentTransaction.addToBackStack(null);
             if (menuItemId != null) {
                 //check if menu item is specified
@@ -97,19 +120,7 @@ public class MainActivity extends AppCompatActivity
                 Integer lastMenuStackItem = menuStack.get(menuStack.size()-1);
                 menuStack.add(lastMenuStackItem);
             }
-        }
         fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
-            finish();
-        } else {
-            super.onBackPressed();
-            menuStack.remove(menuStack.size()-1);
-            navigationView.setCheckedItem(menuStack.get(menuStack.size()-1));
-        }
     }
 
 }

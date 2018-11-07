@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 public class MovieDetailsFragment extends Fragment {
 
-    private static final String MOVIE_ID = "MOVIE_ID";
+    private static final String MOVIE_ID_TAG = "MOVIE_ID_TAG";
 
     public static MovieDetailsFragment newInstance(@NonNull Integer movieId) {
         MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(MOVIE_ID, movieId);
+        bundle.putInt(MOVIE_ID_TAG, movieId);
         movieDetailsFragment.setArguments(bundle);
         return movieDetailsFragment;
     }
@@ -28,7 +28,7 @@ public class MovieDetailsFragment extends Fragment {
 
         TextView textView = view.findViewById(R.id.detailsTextView);
         Bundle bundle = this.getArguments();
-        String string = Integer.toString(bundle.getInt(MOVIE_ID));
+        String string = Integer.toString(bundle.getInt(MOVIE_ID_TAG));
         textView.setText(string);
 
         return view;

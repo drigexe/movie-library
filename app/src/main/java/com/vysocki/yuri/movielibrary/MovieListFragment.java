@@ -19,12 +19,12 @@ public class MovieListFragment extends Fragment {
         public void onMovieSelected(Integer movieId);
     }
 
-    private static final String LIST_TYPE = "LIST_TYPE";
+    private static final String LIST_TYPE_TAG = "LIST_TYPE_TAG";
 
     public static MovieListFragment newInstance(@NonNull Integer movieListType) {
         MovieListFragment movieListFragment = new MovieListFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(LIST_TYPE, movieListType);
+        bundle.putInt(LIST_TYPE_TAG, movieListType);
         movieListFragment.setArguments(bundle);
         return movieListFragment;
     }
@@ -48,7 +48,7 @@ public class MovieListFragment extends Fragment {
 
         TextView textView = view.findViewById(R.id.movielisttextview);
         Bundle bundle = this.getArguments();
-        String movieListType = Integer.toString(bundle.getInt(LIST_TYPE));
+        String movieListType = Integer.toString(bundle.getInt(LIST_TYPE_TAG));
         textView.setText(movieListType);
 
         Button button = view.findViewById(R.id.buttonb);
