@@ -2,31 +2,29 @@ package com.vysocki.yuri.movielibrary;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 public class MovieListViewModel extends AndroidViewModel {
-    //declare repository here
-    //declare Livedata List of Movies here
+    private MovieRepository movieRepository;
+    private LiveData<ResponsePage> responsePage;
+    private int listTypeId;
 
     public MovieListViewModel(@NonNull Application application) {
         super(application);
-        // instantiate repository here with application context
+        movieRepository = new MovieRepository(application);
     }
 
-    // add init(int movie_list_type_id) method, where call
-      // repository.getSpecificMovieList(int page) depends on movie_list_type_id
-      // and assign returned value to the Livedata List of Movies
+    public void init(int listTypeId) {
+        if (this.responsePage != null) {
+            return;
+        }
+        this.listTypeId = listTypeId;
+        this.responsePage = movieRepository.getMoviesPage(this.listTypeId, 1);
 
+    }
 
-    // add getMovieList method which will be observed by the fragment
-
-
-    //add getPopularMovieList(int page), where need to call
-      // repository.getMovieList(relativePath, page)
-
-    //add getUpcomingMovieList(int page), where need to call
-      // repository.getMovieList(relativePath, page)
-
-    //add getTopRatedMovieList(int page), where need to call
-      // repository.getMovieList(relativePath, page)
+    public LiveData<ResponsePage> getResponsePage() {
+        return responsePage;
+    }
 }

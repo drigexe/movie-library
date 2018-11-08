@@ -1,5 +1,7 @@
 package com.vysocki.yuri.movielibrary;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,15 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MovieListFragment extends Fragment {
 
-    OnMovieSelectedListener mCallback;
+    private OnMovieSelectedListener mCallback;
+    private static final String LIST_TYPE_TAG = "LIST_TYPE_TAG";
+    private MovieListViewModel movieListViewModel;
+    private TextView textView;
 
     public interface OnMovieSelectedListener {
         public void onMovieSelected(Integer movieId);
     }
-
-    private static final String LIST_TYPE_TAG = "LIST_TYPE_TAG";
 
     public static MovieListFragment newInstance(@NonNull Integer movieListType) {
         MovieListFragment movieListFragment = new MovieListFragment();
@@ -46,13 +51,17 @@ public class MovieListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
-        TextView textView = view.findViewById(R.id.movielisttextview);
+        textView = view.findViewById(R.id.movielisttextview);
+
         Bundle bundle = this.getArguments();
-        String movieListType = Integer.toString(bundle.getInt(LIST_TYPE_TAG));
-        textView.setText(movieListType);
+        int listTypeId = bundle.getInt(LIST_TYPE_TAG);
+
+        movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
+        movieListViewModel.init(listTypeId);
+        movieListViewModel.getResponsePage().observe(getViewLifecycleOwner(), responsePageObserver);
 
         Button button = view.findViewById(R.id.buttonb);
-        final Integer movieId = 25;
+        final Integer movieId = 241251;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,5 +71,24 @@ public class MovieListFragment extends Fragment {
 
         return view;
     }
+
+    private Observer<ResponsePage> responsePageObserver = new Observer<ResponsePage>() {
+        @Override
+        public void onChanged(@Nullable ResponsePage responsePage) {
+            if (responsePage != null) {
+                List<Movie> movies = responsePage.getMovieList();
+                for (Movie movie : movies) {
+                    String content = "";
+                    content += "id: " + Integer.toString(movie.getMovieId()) + "\n";
+                    content += "title: " + movie.getTitle() + "\n";
+                    content += "release Date: " + movie.getReleaseDate() + "\n";
+                    content += "poster path: " + movie.getPosterPath() + "\n";
+                    textView.append(content);
+                }
+            } else {
+                textView.setText("Something wrong");
+            }
+        }
+    };
 
 }

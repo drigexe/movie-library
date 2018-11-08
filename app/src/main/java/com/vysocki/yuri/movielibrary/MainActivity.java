@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(drawerClickListener);
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            //activity created for the first time
             replaceFragment(MovieListFragment.newInstance(R.id.nav_popular), R.id.nav_popular);
             navigationView.setCheckedItem(R.id.nav_popular);
         }
