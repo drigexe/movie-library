@@ -15,7 +15,7 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public MovieListViewModel(@NonNull Application application) {
         super(application);
-        movieRepository = new MovieRepository(application);
+        movieRepository = new MovieRepository();
     }
 
     public void init(int listTypeId) {

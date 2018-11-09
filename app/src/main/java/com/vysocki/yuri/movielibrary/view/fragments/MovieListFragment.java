@@ -62,7 +62,7 @@ public class MovieListFragment extends Fragment {
 
         errorTextView = view.findViewById(R.id.text_view_error_list);
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         movieAdapter = new MovieAdapter(getContext());

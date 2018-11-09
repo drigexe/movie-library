@@ -10,5 +10,6 @@
     <string name="error_text_view_list_load_error">List was not loaded</string>
     <string name="error_text_view_details_load_error">Details was not loaded</string>
     <string name="error_text_view_tagline_load_error">Details was not loaded</string>
+    <string name="text_view_favorites_empty">You do not add anything here yet</string>
 
 </resources>

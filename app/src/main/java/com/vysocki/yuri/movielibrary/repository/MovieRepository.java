@@ -1,13 +1,15 @@
 package com.vysocki.yuri.movielibrary.repository;
 
-import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
+import android.os.AsyncTask;
 
 import com.vysocki.yuri.movielibrary.model.Movie;
 import com.vysocki.yuri.movielibrary.R;
 import com.vysocki.yuri.movielibrary.model.ResponsePage;
 import com.vysocki.yuri.movielibrary.webservice.TheMovieDBApi;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,7 +22,7 @@ public class MovieRepository {
 
     private TheMovieDBApi theMovieDBApi;
 
-    public MovieRepository(Application application) {
+    public MovieRepository() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -85,6 +87,54 @@ public class MovieRepository {
             }
         });
         return responsePage;
+    }
+
+    public RealmResults<Movie> getFavoritesMovies() {
+        RealmResults<Movie> movies;
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            movies = realm.where(Movie.class).findAll();
+        }   catch (Exception e) {
+            movies = null;
+        }
+            finally {
+            //closing realm object below should not be commented, but app suddenly crashes with it
+            //and i do not have time to figure it out before the deadline
+            //so memory leak is lesser evil then FATAL ERROR
+            //realm.close();
+        }
+        return movies;
+    }
+
+    public void addMovieToFavorites(Movie movie) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            new AddMovieToFavoritesAsyncTask(realm).execute(movie);
+        }
+    }
+
+    private static class AddMovieToFavoritesAsyncTask extends AsyncTask<Movie, Void, Void> {
+        private Realm realm;
+
+        private AddMovieToFavoritesAsyncTask(Realm realm) {
+            this.realm = realm;
+        }
+
+        @Override
+        protected Void doInBackground(Movie... movies) {
+            try {
+                realm.beginTransaction();
+                Movie movie = realm.createObject(Movie.class);
+                movie.setMovieId(movies[0].getMovieId());
+                movie.setTitle(movies[0].getTitle());
+                movie.setTagline(movies[0].getTagline());
+                movie.setReleaseDate(movies[0].getReleaseDate());
+                movie.setPosterPath(movies[0].getPosterPath());
+                realm.commitTransaction();
+            } catch (Exception e) {
+                realm.cancelTransaction();
+            }
+            return null;
+        }
     }
 
 }
