@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/buttonb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:text="KOKOKO" />
-
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonb">
+        android:layout_height="match_parent"
+        tools:listitem="@layout/movie_item"
+        android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/movielisttextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:text="@string/error_text_view_list_downloading"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/buttonb"/>
-
-    </android.support.v4.widget.NestedScrollView>
+        android:id="@+id/text_view_error_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

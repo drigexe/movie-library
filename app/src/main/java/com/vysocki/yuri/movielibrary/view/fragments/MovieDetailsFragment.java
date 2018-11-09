@@ -1,4 +1,4 @@
-package com.vysocki.yuri.movielibrary;
+package com.vysocki.yuri.movielibrary.view.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.vysocki.yuri.movielibrary.model.Movie;
+import com.vysocki.yuri.movielibrary.viewmodel.MovieDetailsViewModel;
+import com.vysocki.yuri.movielibrary.R;
 
 import static com.vysocki.yuri.movielibrary.GlobalConstants.BASE_IMAGES_URL;
 
@@ -60,7 +63,11 @@ public class MovieDetailsFragment extends Fragment {
                     textView.setText(content);
 
                     if (movie.getPosterPath() != null) {
-                        Glide.with(getContext()).load(BASE_IMAGES_URL+ "w500/" + movie.getPosterPath()).into(imageView);
+                        try {
+                            Glide.with(getContext()).load(BASE_IMAGES_URL+ "w500/" + movie.getPosterPath()).into(imageView);
+                        } catch (Exception e) {
+                            imageView.setImageResource(R.drawable.noimage);
+                        }
                     } else {
                         imageView.setImageResource(R.drawable.noimage);
                     }

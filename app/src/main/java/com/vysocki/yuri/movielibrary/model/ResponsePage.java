@@ -1,4 +1,4 @@
-package com.vysocki.yuri.movielibrary;
+package com.vysocki.yuri.movielibrary.model;
 
 import com.google.gson.annotations.SerializedName;
 

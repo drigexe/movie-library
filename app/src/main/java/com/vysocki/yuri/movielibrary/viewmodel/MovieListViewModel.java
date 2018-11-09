@@ -1,9 +1,12 @@
-package com.vysocki.yuri.movielibrary;
+package com.vysocki.yuri.movielibrary.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+
+import com.vysocki.yuri.movielibrary.repository.MovieRepository;
+import com.vysocki.yuri.movielibrary.model.ResponsePage;
 
 public class MovieListViewModel extends AndroidViewModel {
     private MovieRepository movieRepository;
@@ -17,7 +20,9 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public void init(int listTypeId) {
         if (this.responsePage != null) {
-            return;
+            if (this.responsePage.getValue() != null) {
+                return;
+            }
         }
         this.listTypeId = listTypeId;
         this.responsePage = movieRepository.getMoviesPage(this.listTypeId, 1);

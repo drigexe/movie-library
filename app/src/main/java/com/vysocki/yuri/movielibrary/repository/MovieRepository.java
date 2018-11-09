@@ -1,7 +1,12 @@
-package com.vysocki.yuri.movielibrary;
+package com.vysocki.yuri.movielibrary.repository;
 
 import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
+
+import com.vysocki.yuri.movielibrary.model.Movie;
+import com.vysocki.yuri.movielibrary.R;
+import com.vysocki.yuri.movielibrary.model.ResponsePage;
+import com.vysocki.yuri.movielibrary.webservice.TheMovieDBApi;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,4 +1,7 @@
-package com.vysocki.yuri.movielibrary;
+package com.vysocki.yuri.movielibrary.webservice;
+
+import com.vysocki.yuri.movielibrary.model.Movie;
+import com.vysocki.yuri.movielibrary.model.ResponsePage;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

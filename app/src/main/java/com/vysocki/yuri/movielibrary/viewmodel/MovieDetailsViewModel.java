@@ -1,9 +1,12 @@
-package com.vysocki.yuri.movielibrary;
+package com.vysocki.yuri.movielibrary.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+
+import com.vysocki.yuri.movielibrary.model.Movie;
+import com.vysocki.yuri.movielibrary.repository.MovieRepository;
 
 public class MovieDetailsViewModel extends AndroidViewModel {
     private MovieRepository movieRepository;
@@ -16,7 +19,9 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 
     public void init(int movieId) {
         if (this.movie != null) {
-            return;
+            if (this.movie.getValue() != null) {
+                return;
+            }
         }
         this.movie = movieRepository.getMovie(movieId);
     }
