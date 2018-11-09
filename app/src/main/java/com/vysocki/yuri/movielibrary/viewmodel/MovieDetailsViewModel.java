@@ -29,4 +29,16 @@ public class MovieDetailsViewModel extends AndroidViewModel {
     public LiveData<Movie> getMovie() {
         return movie;
     }
+
+    public void addMovieToFavorites(Movie movie) {
+        movieRepository.addMovieToFavorites(movie);
+    }
+
+    public boolean isMovieInFavorites(int movieId) {
+        return movieRepository.isMovieInFavorites(movieId);
+    }
+
+    public void removeMovieFromFavorites(int movieId) {
+        movieRepository.removeMovieFromFavorites(movieId);
+    }
 }

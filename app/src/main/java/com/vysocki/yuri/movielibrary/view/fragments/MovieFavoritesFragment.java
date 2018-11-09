@@ -28,7 +28,7 @@ public class MovieFavoritesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_favorite_movies, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_favorites, container, false);
 
         TextView messageTextView = view.findViewById(R.id.text_view_favorites);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_favorite);

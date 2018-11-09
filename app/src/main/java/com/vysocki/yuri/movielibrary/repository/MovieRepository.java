@@ -97,30 +97,22 @@ public class MovieRepository {
         }   catch (Exception e) {
             movies = null;
         }
-            finally {
             //closing realm object below should not be commented, but app suddenly crashes with it
             //and i do not have time to figure it out before the deadline
             //so memory leak is lesser evil then FATAL ERROR
             //realm.close();
-        }
         return movies;
     }
 
     public void addMovieToFavorites(Movie movie) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            new AddMovieToFavoritesAsyncTask(realm).execute(movie);
-        }
+        new AddMovieToFavoritesAsyncTask().execute(movie);
     }
 
     private static class AddMovieToFavoritesAsyncTask extends AsyncTask<Movie, Void, Void> {
-        private Realm realm;
-
-        private AddMovieToFavoritesAsyncTask(Realm realm) {
-            this.realm = realm;
-        }
 
         @Override
         protected Void doInBackground(Movie... movies) {
+            Realm realm = Realm.getDefaultInstance();
             try {
                 realm.beginTransaction();
                 Movie movie = realm.createObject(Movie.class);
@@ -133,8 +125,40 @@ public class MovieRepository {
             } catch (Exception e) {
                 realm.cancelTransaction();
             }
+            realm.close();
             return null;
         }
+    }
+
+    public boolean isMovieInFavorites(int movieId) {
+        RealmResults<Movie> movies;
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            movies = realm.where(Movie.class).equalTo("movieId", movieId).findAll();
+        } catch (Exception e) {
+            movies = null;
+        }
+        realm.close();
+
+        if (movies.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void removeMovieFromFavorites(int movieId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Movie> movies;
+                movies = realm.where(Movie.class).equalTo("movieId", movieId).findAll();
+                movies.deleteAllFromRealm();
+            }
+        });
+
+        realm.close();
     }
 
 }

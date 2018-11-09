@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class MovieDetailsFragment extends Fragment {
     private TextView taglineTextView;
     private TextView releaseDateTextView;
     private TextView errorTextView;
+    private Button addButton;
+    private static Movie movie;
 
     public static MovieDetailsFragment newInstance(@NonNull Integer movieId) {
         MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
@@ -42,6 +45,7 @@ public class MovieDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
+        addButton = view.findViewById(R.id.button_add_favorite);
         posterImageView = view.findViewById(R.id.detailsImageView);
         titleTextView = view.findViewById(R.id.text_view_title_details);
         taglineTextView = view.findViewById(R.id.text_view_tagline_details);
@@ -55,6 +59,8 @@ public class MovieDetailsFragment extends Fragment {
         movieDetailsViewModel.init(movieId);
         movieDetailsViewModel.getMovie().observe(getViewLifecycleOwner(), movieObserver);
 
+        addButton.setOnClickListener(toFavoritesOnClickListener);
+
         return view;
     }
 
@@ -62,6 +68,14 @@ public class MovieDetailsFragment extends Fragment {
         @Override
         public void onChanged(@Nullable Movie movie) {
             if (movie != null) {
+
+                if (movieDetailsViewModel.isMovieInFavorites(movie.getMovieId())) {
+                    addButton.setText(R.string.text_view_remove_from_favorites);
+                } else {
+                    addButton.setText(R.string.text_view_add_to_favorites);
+                }
+
+                MovieDetailsFragment.movie = movie;
                 errorTextView.setVisibility(View.GONE);
                 setViewsVisibility(View.VISIBLE);
 
@@ -90,11 +104,27 @@ public class MovieDetailsFragment extends Fragment {
 
     };
 
+    View.OnClickListener toFavoritesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Movie movie = MovieDetailsFragment.movie;
+
+            if (movieDetailsViewModel.isMovieInFavorites(movie.getMovieId())) {
+                movieDetailsViewModel.removeMovieFromFavorites(movie.getMovieId());
+                addButton.setText(R.string.text_view_add_to_favorites);
+            } else {
+                movieDetailsViewModel.addMovieToFavorites(movie);
+                addButton.setText(R.string.text_view_remove_from_favorites);
+            }
+        }
+    };
+
     private void setViewsVisibility(int viewsVisibility) {
         posterImageView.setVisibility(viewsVisibility);
         titleTextView.setVisibility(viewsVisibility);
         taglineTextView.setVisibility(viewsVisibility);
         releaseDateTextView.setVisibility(viewsVisibility);
+        addButton.setVisibility(viewsVisibility);
     }
 }
 
