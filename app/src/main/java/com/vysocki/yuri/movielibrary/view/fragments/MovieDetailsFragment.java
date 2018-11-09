@@ -104,7 +104,7 @@ public class MovieDetailsFragment extends Fragment {
 
     };
 
-    View.OnClickListener toFavoritesOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener toFavoritesOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Movie movie = MovieDetailsFragment.movie;

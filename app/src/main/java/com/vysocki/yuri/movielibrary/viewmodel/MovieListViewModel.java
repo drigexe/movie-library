@@ -11,7 +11,6 @@ import com.vysocki.yuri.movielibrary.model.ResponsePage;
 public class MovieListViewModel extends AndroidViewModel {
     private MovieRepository movieRepository;
     private LiveData<ResponsePage> responsePage;
-    private int listTypeId;
 
     public MovieListViewModel(@NonNull Application application) {
         super(application);
@@ -24,8 +23,7 @@ public class MovieListViewModel extends AndroidViewModel {
                 return;
             }
         }
-        this.listTypeId = listTypeId;
-        this.responsePage = movieRepository.getMoviesPage(this.listTypeId, 1);
+        this.responsePage = movieRepository.getMoviesPage(listTypeId, 1);
 
     }
 

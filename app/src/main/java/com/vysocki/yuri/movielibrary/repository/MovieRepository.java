@@ -63,11 +63,9 @@ public class MovieRepository {
 
         if (movieListType == R.id.nav_popular) {
             call = theMovieDBApi.getPopularMovies(page);
-        }
-        else if (movieListType == R.id.nav_upcoming) {
+        } else if (movieListType == R.id.nav_upcoming) {
             call = theMovieDBApi.getUpcomingMovies(page);
-        }
-        else {
+        } else {
             call = theMovieDBApi.getTopRatedMovies(page);
         }
 
@@ -94,13 +92,13 @@ public class MovieRepository {
         Realm realm = Realm.getDefaultInstance();
         try {
             movies = realm.where(Movie.class).findAll();
-        }   catch (Exception e) {
+        } catch (Exception e) {
             movies = null;
         }
-            //closing realm object below should not be commented, but app suddenly crashes with it
-            //and i do not have time to figure it out before the deadline
-            //so memory leak is lesser evil then FATAL ERROR
-            //realm.close();
+        //closing realm object below should not be commented, but app suddenly crashes with it
+        //and i do not have time to figure it out before the deadline
+        //so memory leak is lesser evil then FATAL ERROR
+        //realm.close();
         return movies;
     }
 
