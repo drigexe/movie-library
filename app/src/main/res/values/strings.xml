@@ -6,7 +6,9 @@
     <string name="drawer_top_rated">Top rated</string>
     <string name="drawer_favorites">Favorites</string>
 
-    <string name="error_text_view_list_downloading">Downloading</string>
+    <string name="error_text_view_downloading">Downloading</string>
     <string name="error_text_view_list_load_error">List was not loaded</string>
+    <string name="error_text_view_details_load_error">Details was not loaded</string>
+    <string name="error_text_view_tagline_load_error">Details was not loaded</string>
 
 </resources>

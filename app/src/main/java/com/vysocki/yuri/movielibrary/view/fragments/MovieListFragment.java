@@ -74,7 +74,7 @@ public class MovieListFragment extends Fragment {
         movieListViewModel.init(listTypeId);
         movieListViewModel.getResponsePage().observe(getViewLifecycleOwner(), responsePageObserver);
 
-        //mCallback.onMovieSelected(movieId);
+        //mCallback.onMovieSelected(297761);
 
         return view;
     }
