@@ -29,6 +29,7 @@ public class MovieListFragment extends Fragment {
     private MovieAdapter movieAdapter;
     private RecyclerView recyclerView;
     private TextView errorTextView;
+    private List<Movie> movies;
 
     public interface OnMovieSelectedListener {
         public void onMovieSelected(Integer movieId);
@@ -67,14 +68,14 @@ public class MovieListFragment extends Fragment {
         movieAdapter = new MovieAdapter(getContext());
         recyclerView.setAdapter(movieAdapter);
 
+        movieAdapter.setOnItemClickListener(listener);
+
         Bundle bundle = this.getArguments();
         int listTypeId = bundle.getInt(LIST_TYPE_TAG);
 
         MovieListViewModel movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
         movieListViewModel.init(listTypeId);
         movieListViewModel.getResponsePage().observe(getViewLifecycleOwner(), responsePageObserver);
-
-        //mCallback.onMovieSelected(297761);
 
         return view;
     }
@@ -86,13 +87,20 @@ public class MovieListFragment extends Fragment {
                 recyclerView.setVisibility(View.VISIBLE);
                 errorTextView.setVisibility(View.GONE);
 
-                List<Movie> movies = responsePage.getMovieList();
+                movies = responsePage.getMovieList();
                 movieAdapter.setMovies(movies);
             } else {
                 recyclerView.setVisibility(View.GONE);
                 errorTextView.setText(R.string.error_text_view_list_load_error);
                 errorTextView.setVisibility(View.VISIBLE);
             }
+        }
+    };
+
+    private MovieAdapter.OnItemClickListener listener = new MovieAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(int position) {
+            mCallback.onMovieSelected(movies.get(position).getMovieId());
         }
     };
 

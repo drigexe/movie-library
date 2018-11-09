@@ -21,6 +21,15 @@ import static com.vysocki.yuri.movielibrary.GlobalConstants.BASE_IMAGES_URL;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
     private List<Movie> movies = new ArrayList<>();
     private Context mContext;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     public MovieAdapter(Context mContext) {
         this.mContext = mContext;
@@ -31,7 +40,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     public MovieHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.movie_item, viewGroup, false);
-        return new MovieHolder(itemView);
+        return new MovieHolder(itemView, mListener);
     }
 
     @Override
@@ -51,7 +60,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         } else {
             movieHolder.imageViewPoster.setImageResource(R.drawable.noimage);
         }
-
     }
 
     @Override
@@ -69,11 +77,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         private TextView textViewReleaseDate;
         private ImageView imageViewPoster;
 
-        public MovieHolder(@NonNull View itemView) {
+        public MovieHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title_list);
             textViewReleaseDate = itemView.findViewById(R.id.text_view_release_date_list);
             imageViewPoster = itemView.findViewById(R.id.image_view_list_poster);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
